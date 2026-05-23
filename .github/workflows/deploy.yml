@@ -55,6 +55,12 @@ jobs:
           cp edk2/Build/ArmVirtQemu-AArch64/RELEASE_CLANGDWARF/FV/QEMU_VARS.fd ovmf-nightly/ovmf-vars-armv8.fd
           cp edk2/Build/RiscVVirtQemu/RELEASE_CLANGDWARF/FV/RISCV_VIRT_CODE.fd ovmf-nightly/ovmf-code-rv64.fd
           cp edk2/Build/RiscVVirtQemu/RELEASE_CLANGDWARF/FV/RISCV_VIRT_VARS.fd ovmf-nightly/ovmf-vars-rv64.fd
+
+          dd if=/dev/zero of=ovmf-nightly/ovmf-code-aarch64.fd bs=1 count=0 seek=67108864
+          dd if=/dev/zero of=ovmf-nightly/ovmf-vars-riscv64.fd bs=1 count=0 seek=33554432
+          
+          dd if=/dev/zero of=ovmf-nightly/ovmf-vars-aarch64.fd bs=1 count=0 seek=67108864
+          dd if=/dev/zero of=ovmf-nightly/ovmf-code-riscv64.fd bs=1 count=0 seek=33554432
           
           mkdir deploy
           tar -cvzf deploy/ovmf.tar.gz ovmf-nightly
