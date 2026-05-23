@@ -48,7 +48,7 @@ jobs:
           tar -cvzf deploy/ovmf.tar.gz ovmf-nightly
 
       - name: Release
-        uses: softprops/gh-release@v3
+        uses: softprops/action-gh-release@v3
         with:
           token: ${{ github.token }}
           tag_name: "nightly"
