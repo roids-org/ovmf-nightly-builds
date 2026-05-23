@@ -38,9 +38,12 @@ jobs:
         run: |
           cd edk2
           . ./edksetup.sh
-          make -C BaseTools
 
-          build -b RELEASE -t GCC -a X64 -p OvmfPkg/OvmfPkgX64.dsc
+          THREADS=$(nproc)
+          
+          make -j$THREADS -C BaseTools
+
+          build -b RELEASE -t GCC -a X64 -p OvmfPkg/OvmfPkgX64.dsc -n $THREADS
           
           cd ..
           
