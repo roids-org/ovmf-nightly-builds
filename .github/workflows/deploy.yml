@@ -10,7 +10,11 @@ jobs:
     name: Build OVMF for amd64
     runs-on: ubuntu-latest
     container: archlinux:latest
-
+    
+    permissions:
+      contents: write
+      packages: write
+        
     steps:
       - name: Install dependencies
         run: | 
