@@ -31,8 +31,7 @@ jobs:
       - name: Checkout EDK2 submodules
         run: |
           cd edk2
-          git submodule init
-          git submodule update
+          git submodule update --init --jobs $(nproc)
 
       - name: Package release tarball
         run: |
@@ -43,7 +42,7 @@ jobs:
           
           make -j$THREADS -C BaseTools
 
-          build -b RELEASE -t GCC -a X64 -p OvmfPkg/OvmfPkgX64.dsc -n $THREADS
+          build -b RELEASE -t CLANGPDB -a X64 -p OvmfPkg/OvmfPkgX64.dsc -n $THREADS
           
           cd ..
           
