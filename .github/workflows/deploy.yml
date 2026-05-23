@@ -1,0 +1,58 @@
+name: Deploy
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build OVMF for amd64
+    runs-on: ubuntu-latest
+    container: archlinux:latest
+
+    steps:
+      - name: Install dependencies
+        run: | 
+          pacman --noconfirm -Syu
+          pacman --needed --noconfirm -S nodejs dpkg xz jq nasm base-devel gnupg tar gzip git curl llvm clang lld acpica
+
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Checkout EDK2
+        run: |
+          git clone https://github.com/tianocore/edk2 --depth 1
+          
+      - name: Checkout EDK2 submodules
+        run: |
+          cd edk2
+          git submodule init
+          git submodule update
+
+      - name: Package release tarball
+        run: |
+          cd edk2
+          . ./edksetup.sh
+          make -C BaseTools
+
+          build -b RELEASE -t GCC -a X64 -p OvmfPkg/OvmfPkgX64.dsc
+          
+          cd ..
+          
+          mkdir ovmf-nightly
+          cp edk2/Build/OvmfX64/RELEASE_GCC/FV/OVMF_CODE.fd ovmf-nightly/ovmf-code-amd64.fd
+          cp edk2/Build/OvmfX64/RELEASE_GCC/FV/OVMF_VARS.fd ovmf-nightly/ovmf-vars-amd64.fd
+          
+          mkdir deploy
+          tar -cvzf deploy/ovmf.tar.gz ovmf-nightly
+
+      - name: Release
+        uses: softprops/gh-release@v3
+        with:
+          token: ${{ github.token }}
+          tag_name: "nightly"
+          name: "Nightly build"
+          files: deploy/ovmf.tar.gz
+          body: |
+            A nightly OVMF build from the CI.
