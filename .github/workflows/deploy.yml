@@ -47,8 +47,8 @@ jobs:
           cd ..
           
           mkdir ovmf-nightly
-          cp edk2/Build/OvmfX64/RELEASE_GCC/FV/OVMF_CODE.fd ovmf-nightly/ovmf-code-amd64.fd
-          cp edk2/Build/OvmfX64/RELEASE_GCC/FV/OVMF_VARS.fd ovmf-nightly/ovmf-vars-amd64.fd
+          cp edk2/Build/OvmfX64/RELEASE_CLANGPDB/FV/OVMF_CODE.fd ovmf-nightly/ovmf-code-amd64.fd
+          cp edk2/Build/OvmfX64/RELEASE_CLANGPDB/FV/OVMF_VARS.fd ovmf-nightly/ovmf-vars-amd64.fd
           
           mkdir deploy
           tar -cvzf deploy/ovmf.tar.gz ovmf-nightly
