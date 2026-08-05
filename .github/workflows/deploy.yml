@@ -33,6 +33,11 @@ jobs:
           cd edk2
           git submodule update --init --jobs $(nproc)
 
+      - name: Apply patches
+        run: |
+          cd edk2
+          git apply ../patch/ovmf-amd64-mouse-support.patch
+
       - name: Package release tarball
         run: |
           cd edk2
